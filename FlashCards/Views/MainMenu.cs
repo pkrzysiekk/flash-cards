@@ -1,4 +1,5 @@
-﻿using Spectre.Console;
+﻿using FlashCards.Models;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace FlashCards.Views
 {
-    public class MainMenu
+    public class MainMenu : IMenu
     {
         private static string[] _choices= { "Menage Stacks", "Menage FlashCards", "Study", "View Study Sessions","Exit" };
-        private StackMenu _stackMenu= new();
+        private IMenu _stackMenu= new StackMenu();
+        private IMenu _flashCardMenu=new FlashCardMenu();
         public string GetUserChoice()
         {
             var menuChoice = AnsiConsole.Prompt(new SelectionPrompt<string>()
@@ -30,7 +32,8 @@ namespace FlashCards.Views
                     case "Menage Stacks":
                         _stackMenu.Show();
                         break;
-                    case "Menage FlashCard":
+                    case "Menage FlashCards":
+                        _flashCardMenu.Show();
                         break;
                     case "Study":
                         break;

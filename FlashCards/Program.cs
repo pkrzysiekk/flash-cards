@@ -7,6 +7,7 @@ using System.Diagnostics.Metrics;
 using System.Security.Principal;
 using Spectre.Console;
 using FlashCards.Views;
+using FlashCards.Controllers;
 
 namespace FlashCards
 {
@@ -15,6 +16,7 @@ namespace FlashCards
 
         static void Main()
         {
+            DbInitializer initializer = new();
             MainMenu main = new();
             main.Show();
             //DbController dbController = new DbController();
