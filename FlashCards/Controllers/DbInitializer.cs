@@ -71,6 +71,7 @@ BEGIN
     CREATE TABLE sessions (
         Id INT IDENTITY(1,1) PRIMARY KEY,
         Score INT NOT NULL,
+        MaxScore INT NOT NULL,
         Date SMALLDATETIME NOT NULL,
         StackId INT NOT NULL,
         CONSTRAINT FK_sessions_stacks FOREIGN KEY (StackId) REFERENCES stacks(Id) ON DELETE CASCADE

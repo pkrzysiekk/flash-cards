@@ -14,7 +14,7 @@ namespace FlashCards.Views
         {
             
             foreach (var stack in stacks) 
-                {
+            {
                 var table = new Table();
                 table.AddColumn($"{stack.Name}");
                 table.Border(TableBorder.DoubleEdge);
@@ -22,5 +22,7 @@ namespace FlashCards.Views
             }
             
         }
+
+        
     }
 }

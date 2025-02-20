@@ -13,6 +13,7 @@ namespace FlashCards.Views
         private static string[] _choices= { "Menage Stacks", "Menage FlashCards", "Study", "View Study Sessions","Exit" };
         private IMenu _stackMenu= new StackMenu();
         private IMenu _flashCardMenu=new FlashCardMenu();
+        private IMenu _studyMenu=new StudyMenu();
         public string GetUserChoice()
         {
             var menuChoice = AnsiConsole.Prompt(new SelectionPrompt<string>()
@@ -36,6 +37,7 @@ namespace FlashCards.Views
                         _flashCardMenu.Show();
                         break;
                     case "Study":
+                        _studyMenu.Show();
                         break;
                     case "View Study Sessions":
                         break;

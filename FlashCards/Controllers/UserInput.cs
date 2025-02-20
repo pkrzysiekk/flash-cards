@@ -1,4 +1,5 @@
-﻿using FlashCards.Models.Stack;
+﻿using FlashCards.Models.FlashCards;
+using FlashCards.Models.Stack;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace FlashCards.Controllers
 {
     public static class UserInput
     {
+        
 
         public static T GetModelToAdd<T>(T model)
         {
@@ -17,18 +19,20 @@ namespace FlashCards.Controllers
             {
                 case StackBO:
                     string nameToAdd = AnsiConsole.Prompt(
-                   new TextPrompt<string>("[Green]Insert the name of the stack to add: [/]")
+                   new TextPrompt<string>("[Green]Insert the name of the stack: [/]")
                    );
                     return (T)(Object)new StackBO() { Name = nameToAdd };
-                
+                case FlashCardBO:
+                  string name1ToAdd = AnsiConsole.Prompt(
+                 new TextPrompt<string>("[Green]Insert the first side of the flashCard: [/]")
+                 );
+                string name2ToAdd = AnsiConsole.Prompt(
+                new TextPrompt<string>("[Green]Insert the second side the flashCard: [/]")
+                );
+                    return (T)(Object)new FlashCardBO() {Name1=name1ToAdd,Name2=name2ToAdd };
                     default:
                     return model;
-
-
-
             }
-
-
         }
     }
 }
