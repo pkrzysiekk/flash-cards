@@ -48,6 +48,7 @@ namespace FlashCards.Views
                         stack = _stackController.GetUserSelection(stackList);
                         cards=_flashCardsController.GetAllCardsFromStack(stack);
                         session = _studyController.StartSession(cards);
+                        AnsiConsole.MarkupLine($"[Green]Your score is {session.Score}/{session.MaxScore}[/]");
                         _sessionController.Insert(stack,session);
                         break;
                     case "Exit":

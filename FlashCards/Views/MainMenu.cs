@@ -1,4 +1,6 @@
-﻿using FlashCards.Models;
+﻿using FlashCards.Controllers;
+using FlashCards.Models;
+using FlashCards.Models.MenuEnums;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
@@ -10,15 +12,25 @@ namespace FlashCards.Views
 {
     public class MainMenu : IMenu
     {
-        private static string[] _choices= { "Menage Stacks", "Menage FlashCards", "Study", "View Study Sessions","Exit" };
+        private MainMenuEnum _mainMenuEnum;
         private IMenu _stackMenu= new StackMenu();
         private IMenu _flashCardMenu=new FlashCardMenu();
         private IMenu _studyMenu=new StudyMenu();
-        public string GetUserChoice()
+        private SessionController _sessionController = new SessionController();
+        public MainMenuEnum GetUserChoice()
         {
-            var menuChoice = AnsiConsole.Prompt(new SelectionPrompt<string>()
+            var menuChoice = AnsiConsole.Prompt(new SelectionPrompt<MainMenuEnum>()
                .Title("[Teal]What would you want to do? [/]")
-               .AddChoices(_choices)
+               .AddChoices(Enum.GetValues<MainMenuEnum>())
+               .UseConverter(x => x switch
+               {
+                   MainMenuEnum.Menage_Stacks => "Menage Stacks",
+                   MainMenuEnum.Menage_FlashCards => "Menage FlashCards",
+                   MainMenuEnum.Study => "Study",
+                   MainMenuEnum.View_StudySessions => "View StudySessions",
+                   MainMenuEnum.Exit => "Exit",
+                   _ => throw new NotImplementedException()
+               })
                );
             return menuChoice;
         }
@@ -26,22 +38,29 @@ namespace FlashCards.Views
         {
             while (true)
             {
-                string choice = GetUserChoice();
+                MainMenuEnum choice = GetUserChoice();
 
                 switch (choice)
                 {
-                    case "Menage Stacks":
+                    case MainMenuEnum.Menage_Stacks:
                         _stackMenu.Show();
                         break;
-                    case "Menage FlashCards":
+                    case MainMenuEnum.Menage_FlashCards:
                         _flashCardMenu.Show();
                         break;
-                    case "Study":
+                    case MainMenuEnum.Study:
                         _studyMenu.Show();
                         break;
-                    case "View Study Sessions":
+                    case MainMenuEnum.View_StudySessions:
+                        var sessions= _sessionController.GetAll();
+                        if(sessions.Count() == 0)
+                        {
+                            AnsiConsole.MarkupLine("[White]No sessions, study first![/]");
+                            continue;
+                        }
+                        SessionView.ShowSessions(sessions);
                         break;
-                    case "Exit":
+                    case MainMenuEnum.Exit:
                         return;
 
                 }

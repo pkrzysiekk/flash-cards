@@ -30,5 +30,22 @@ namespace FlashCards.Controllers
                 }
             }
         }
+
+        public IEnumerable<SessionBO>? GetAll()
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                var sql = "SELECT * FROM sessions";
+                try
+                {
+                    return connection.Query<SessionBO>(sql).ToList();
+                }
+                catch (Exception ex)
+                {
+                    AnsiConsole.MarkupLine($"[Red]{ex.Message}[/]");
+                    return null;
+                }
+            }
+        }
     }
 }
