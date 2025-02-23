@@ -2,15 +2,9 @@
 using FlashCards.Models;
 using FlashCards.Models.FlashCards;
 using FlashCards.Models.Stack;
-using FlashCards.Views;
 using Microsoft.Data.SqlClient;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace FlashCards.Controllers
 {
