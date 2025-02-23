@@ -1,6 +1,7 @@
 ﻿using FlashCards.Controllers;
 using FlashCards.Models;
 using FlashCards.Models.FlashCards;
+using FlashCards.Models.MenuEnums;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Spectre.Console;
 using System;
@@ -9,17 +10,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlashCards.Views
+namespace FlashCards.Views.Menus
 {
     public class FlashCardMenu : IMenu
     {
-        private FlashCardsController _flashCardController= new();
-        private static string[] _choices = {"See FlashCards","Delete FlashCard","Edit FlashCard","Exit" };
-        private string GetUserChoice()
+        private FlashCardsController _flashCardController = new();
+        private FlashCardEnum GetUserChoice()
         {
-            var menuChoice = AnsiConsole.Prompt(new SelectionPrompt<string>()
+            var menuChoice = AnsiConsole.Prompt(new SelectionPrompt<FlashCardEnum>()
               .Title("[Green]What would you want to do? [/]")
-              .AddChoices(_choices)
+              .AddChoices(Enum.GetValues<FlashCardEnum>())
+             .UseConverter(x => x switch
+                {
+                    FlashCardEnum.Add_FlashCard => "Add FlashCard",
+                    FlashCardEnum.Edit_FlashCard => "Edit FlashCard",
+                    FlashCardEnum.Delete_FlashCard => "Delete FlashCard",
+                    FlashCardEnum.Exit => "Exit",
+                    _ => throw new NotImplementedException()
+                }
+                )
               );
             return menuChoice;
         }
@@ -27,14 +36,14 @@ namespace FlashCards.Views
         {
             while (true)
             {
-                string choice = GetUserChoice();
-                IEnumerable<FlashCardBO> cardsList= new List<FlashCardBO>();
+                FlashCardEnum choice = GetUserChoice();
+                IEnumerable<FlashCardBO> cardsList = new List<FlashCardBO>();
                 IEnumerable<FlashCardDTO> cardsListDTO = new List<FlashCardDTO>();
                 AnsiConsole.Clear();
                 switch (choice)
                 {
-                    case "See FlashCards":
-                         cardsListDTO = _flashCardController.GetAllCardsDTO();
+                    case FlashCardEnum.Add_FlashCard:
+                        cardsListDTO = _flashCardController.GetAllCardsDTO();
                         if (cardsListDTO.Count() == 0)
                         {
                             AnsiConsole.MarkupLine($"[White]No cards,create one first[/]");
@@ -42,7 +51,7 @@ namespace FlashCards.Views
                         }
                         CardView.ShowCollection(cardsListDTO);
                         break;
-                    case "Delete FlashCard":
+                    case FlashCardEnum.Delete_FlashCard:
                         cardsList = _flashCardController.GetAllCardsBO();
                         if (cardsList.Count() == 0)
                         {
@@ -52,7 +61,7 @@ namespace FlashCards.Views
                         var cardToDelete = _flashCardController.GetUserCardSelection(cardsList);
                         _flashCardController.Delete(cardToDelete);
                         break;
-                    case "Edit FlashCard":
+                    case FlashCardEnum.Edit_FlashCard:
                         cardsList = _flashCardController.GetAllCardsBO();
                         if (cardsListDTO.Count() == 0)
                         {
@@ -64,7 +73,7 @@ namespace FlashCards.Views
                         var newCard = UserInput.GetModelToAdd(_ = new FlashCardBO());
                         _flashCardController.Update(cardToEdit, newCard);
                         break;
-                    case "Exit":
+                    case FlashCardEnum.Exit:
                         return;
 
                 }

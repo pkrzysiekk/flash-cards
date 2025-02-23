@@ -8,14 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlashCards.Views
+namespace FlashCards.Views.Menus
 {
     public class MainMenu : IMenu
     {
         private MainMenuEnum _mainMenuEnum;
-        private IMenu _stackMenu= new StackMenu();
-        private IMenu _flashCardMenu=new FlashCardMenu();
-        private IMenu _studyMenu=new StudyMenu();
+        private IMenu _stackMenu = new StackMenu();
+        private IMenu _flashCardMenu = new FlashCardMenu();
+        private IMenu _studyMenu = new StudyMenu();
         private SessionController _sessionController = new SessionController();
         public MainMenuEnum GetUserChoice()
         {
@@ -52,8 +52,8 @@ namespace FlashCards.Views
                         _studyMenu.Show();
                         break;
                     case MainMenuEnum.View_StudySessions:
-                        var sessions= _sessionController.GetAll();
-                        if(sessions.Count() == 0)
+                        var sessions = _sessionController.GetAll();
+                        if (sessions.Count() == 0)
                         {
                             AnsiConsole.MarkupLine("[White]No sessions, study first![/]");
                             continue;
